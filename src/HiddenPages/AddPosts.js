@@ -65,6 +65,8 @@ const AddPost = () => {
               timestamp: new Date(),
             });
 
+            console.log("Post added:", { description, location, category, imageURL });
+
             setDescription("");
             setLocation("");
             setCategory("");

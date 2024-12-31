@@ -11,6 +11,10 @@ const PlusPage = () => {
   const handleCreateKlip = () => {
     navigate("/addklip"); // Navigate to AddKlip page
   };
+  
+  const handleCreateEvent = () => {
+    navigate("/addevent"); // Navigate to AddKlip page
+  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
@@ -27,6 +31,12 @@ const PlusPage = () => {
           className="bg-teal-500 text-white py-3 px-6 rounded-lg text-xl shadow-md transform transition-transform hover:scale-105 focus:outline-none"
         >
           Create Klip
+        </button>
+        <button
+          onClick={handleCreateEvent}
+          className="bg-teal-500 text-white py-3 px-6 rounded-lg text-xl shadow-md transform transition-transform hover:scale-105 focus:outline-none"
+        >
+          Create Events
         </button>
       </div>
     </div>

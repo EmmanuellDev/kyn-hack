@@ -10,6 +10,7 @@ import NotFound from './pages/NotFound';
 import Profile from './pages/Profile';
 import AddPost from './HiddenPages/AddPosts';
 import AddKlips from './HiddenPages/AddKlips';
+import AddEvent from './HiddenPages/AddEvents';
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
           <Route path="/profile" element={<Profile />} />
           <Route path="/addpost" element={<AddPost />} />
           <Route path="/addklip" element={<AddKlips />} />
+          <Route path="/addevent" element={<AddEvent />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
