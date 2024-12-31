@@ -1,18 +1,40 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+// Home.js
+
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import logo from '../img/logo.png'; // Ensure the path is correct
+import { db } from '../firebase'; // Import Firestore
+import { collection, query, orderBy, getDocs } from 'firebase/firestore'; // Firestore methods
 
 const Home = () => {
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
-  const navigate = useNavigate(); // Initialize the navigate function
+  const [klips, setKlips] = useState([]); // State to store klips
+  const navigate = useNavigate();
 
   const toggleNotifications = () => {
     setNotificationsEnabled(!notificationsEnabled);
   };
 
   const handleProfileClick = () => {
-    navigate('/profile'); // Redirect to profile page
+    navigate('/profile');
   };
+
+  // Fetch klips from Firestore
+  const fetchKlips = async () => {
+    try {
+      const q = query(collection(db, 'klips'), orderBy('timestamp', 'desc')); // Get latest klips first
+      const querySnapshot = await getDocs(q);
+      const klipsList = querySnapshot.docs.map((doc) => doc.data());
+      setKlips(klipsList);
+    } catch (error) {
+      console.error('Error fetching klips: ', error);
+    }
+  };
+
+  // Fetch klips when the component mounts
+  useEffect(() => {
+    fetchKlips();
+  }, []); // Empty dependency array means this runs only once when the component mounts
 
   return (
     <div className="container mx-auto p-4">
@@ -36,9 +58,7 @@ const Home = () => {
           {/* Bell Icon */}
           <button
             onClick={toggleNotifications}
-            className={`p-2 rounded-full ${
-              notificationsEnabled ? 'text-teal-500' : 'text-gray-500'
-            }`}
+            className={`p-2 rounded-full ${notificationsEnabled ? 'text-teal-500' : 'text-gray-500'}`}
           >
             <span className="material-icons">
               {notificationsEnabled ? 'notifications_active' : 'notifications_off'}
@@ -48,7 +68,7 @@ const Home = () => {
           {/* Profile Icon */}
           <span
             className="material-icons text-gray-500 text-3xl cursor-pointer"
-            onClick={handleProfileClick} // Add onClick to redirect
+            onClick={handleProfileClick}
           >
             account_circle
           </span>
@@ -59,6 +79,28 @@ const Home = () => {
       <div className="text-center mt-4">
         <h1 className="text-2xl sm:text-3xl font-bold text-teal-500">Welcome to KYN!</h1>
         <p className="mt-2 text-sm sm:text-base">Explore the app and enjoy its features.</p>
+      </div>
+
+      {/* Display Klips Section */}
+      <div className="mt-8">
+        <h2 className="text-xl font-semibold text-teal-500 mb-4">Recent Klips</h2>
+        {klips.length > 0 ? (
+          <div className="space-y-4">
+            {klips.map((klip, index) => (
+              <div key={index} className="bg-white p-4 rounded-lg shadow-md">
+                <video controls className="w-full mb-4">
+                  <source src={klip.videoURL} type="video/mp4" />
+                </video>
+                <p className="text-sm text-gray-700">{klip.description}</p>
+                <p className="text-xs text-gray-500">{klip.location}</p>
+                <p className="text-xs text-gray-500">Category: {klip.category}</p>
+                <p className="text-xs text-gray-500">Posted on: {new Date(klip.timestamp.seconds * 1000).toLocaleDateString()}</p>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p>No klips available. Add some now!</p>
+        )}
       </div>
     </div>
   );

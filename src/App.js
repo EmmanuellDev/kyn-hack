@@ -8,6 +8,8 @@ import Videos from './pages/Videos';
 import Klips from './pages/Klips';
 import NotFound from './pages/NotFound';
 import Profile from './pages/Profile';
+import AddPost from './HiddenPages/AddPosts';
+import AddKlips from './HiddenPages/AddKlips';
 
 const App = () => {
   return (
@@ -20,6 +22,8 @@ const App = () => {
           <Route path="/videos" element={<Videos />} />
           <Route path="/klips" element={<Klips />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/addpost" element={<AddPost />} />
+          <Route path="/addklip" element={<AddKlips />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
